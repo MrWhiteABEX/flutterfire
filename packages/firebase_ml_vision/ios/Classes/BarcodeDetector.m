@@ -46,8 +46,8 @@ NSDictionary *visionBarcodeToDictionary(MLKBarcode *barcode) {
     [points addObject:@[ @(point.CGPointValue.x), @(point.CGPointValue.y) ]];
   }
   return @{
-    @"rawValue" : barcode.rawValue,
-    @"displayValue" : barcode.displayValue ? barcode.displayValue : [NSNull null],
+    @"rawValue" : barcode.rawValue ?: [NSNull null],
+    @"displayValue" : barcode.displayValue ?: [NSNull null],
     @"left" : @(barcode.frame.origin.x),
     @"top" : @(barcode.frame.origin.y),
     @"width" : @(barcode.frame.size.width),
@@ -67,24 +67,24 @@ NSDictionary *visionBarcodeToDictionary(MLKBarcode *barcode) {
     @"calendarEvent" : barcode.calendarEvent ? calendarEventToDictionary(barcode.calendarEvent)
                                              : [NSNull null],
     @"driverLicense" : barcode.driverLicense ? driverLicenseToDictionary(barcode.driverLicense)
-                                             : [NSNull null],
+                                             : [NSNull null]
   };
 }
 
 NSDictionary *visionBarcodeWiFiToDictionary(MLKBarcodeWiFi *wifi) {
   return @{
-    @"ssid" : wifi.ssid,
-    @"password" : wifi.password,
-    @"encryptionType" : @(wifi.type),
+    @"ssid" : wifi.ssid ?: [NSNull null],
+    @"password" : wifi.password ?: [NSNull null],
+    @"encryptionType" : @(wifi.type)
   };
 }
 
 NSDictionary *visionBarcodeEmailToDictionary(MLKBarcodeEmail *email) {
   return @{
-    @"address" : email.address,
-    @"body" : email.body,
-    @"subject" : email.subject,
-    @"type" : @(email.type),
+    @"address" : email.address ?: [NSNull null],
+    @"body" : email.body ?: [NSNull null],
+    @"subject" : email.subject ?: [NSNull null],
+    @"type" : @(email.type)
   };
 }
 
@@ -97,8 +97,8 @@ NSDictionary *visionBarcodePhoneToDictionary(MLKBarcodePhone *phone) {
 
 NSDictionary *visionBarcodeSMSToDictionary(MLKBarcodeSMS *sms) {
   return @{
-    @"phoneNumber" : sms.phoneNumber,
-    @"message" : sms.message,
+    @"phoneNumber" : sms.phoneNumber ?: [NSNull null],
+    @"message" : sms.message ?: [NSNull null]
   };
 }
 
@@ -125,20 +125,17 @@ NSDictionary *barcodeContactInfoToDictionary(MLKBarcodeContactInfo *contact) {
                                                        NSUInteger idx, BOOL *_Nonnull stop) {
       [addressLines addObject:addressLine];
     }];
-    [addresses addObject:@{
-      @"addressLines" : addressLines,
-      @"type" : @(address.type),
-    }];
+    [addresses addObject:@{@"addressLines" : addressLines, @"type" : @(address.type)}];
   }];
 
   __block NSMutableArray<NSDictionary *> *emails = [NSMutableArray array];
   [contact.emails enumerateObjectsUsingBlock:^(MLKBarcodeEmail *_Nonnull email, NSUInteger idx,
                                                BOOL *_Nonnull stop) {
     [emails addObject:@{
-      @"address" : email.address ? email.address : [NSNull null],
-      @"body" : email.body ? email.body : [NSNull null],
-      @"subject" : email.subject ? email.subject : [NSNull null],
-      @"type" : @(email.type),
+      @"address" : email.address ?: [NSNull null],
+      @"body" : email.body ?: [NSNull null],
+      @"subject" : email.subject ?: [NSNull null],
+      @"type" : @(email.type)
     }];
   }];
 
@@ -170,8 +167,8 @@ NSDictionary *barcodeContactInfoToDictionary(MLKBarcodeContactInfo *contact) {
       @"pronunciation" : contact.name.pronunciation ? contact.name.pronunciation : [NSNull null],
       @"suffix" : contact.name.suffix ? contact.name.suffix : [NSNull null],
     },
-    @"jobTitle" : contact.jobTitle ? contact.jobTitle : [NSNull null],
-    @"organization" : contact.organization ? contact.jobTitle : [NSNull null],
+    @"jobTitle" : contact.jobTitle ?: [NSNull null],
+    @"organization" : contact.organization ?: [NSNull null]
   };
 }
 
@@ -181,32 +178,32 @@ NSDictionary *calendarEventToDictionary(MLKBarcodeCalendarEvent *calendar) {
   dateFormatter.dateFormat = @"yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'";
   dateFormatter.timeZone = [NSTimeZone timeZoneForSecondsFromGMT:0];
   return @{
-    @"eventDescription" : calendar.eventDescription,
-    @"location" : calendar.location,
-    @"organizer" : calendar.organizer,
-    @"status" : calendar.status,
-    @"summary" : calendar.summary,
+    @"eventDescription" : calendar.eventDescription ?: [NSNull null],
+    @"location" : calendar.location ?: [NSNull null],
+    @"organizer" : calendar.organizer ?: [NSNull null],
+    @"status" : calendar.status ?: [NSNull null],
+    @"summary" : calendar.summary ?: [NSNull null],
     @"start" : [dateFormatter stringFromDate:calendar.start],
-    @"end" : [dateFormatter stringFromDate:calendar.end],
+    @"end" : [dateFormatter stringFromDate:calendar.end]
   };
 }
 
 NSDictionary *driverLicenseToDictionary(MLKBarcodeDriverLicense *license) {
   return @{
-    @"firstName" : license.firstName,
-    @"middleName" : license.middleName,
-    @"lastName" : license.lastName,
-    @"gender" : license.gender,
-    @"addressCity" : license.addressCity,
-    @"addressStreet" : license.addressStreet,
-    @"addressState" : license.addressState,
-    @"addressZip" : license.addressZip,
-    @"birthDate" : license.birthDate,
-    @"documentType" : license.documentType,
-    @"licenseNumber" : license.licenseNumber,
-    @"expiryDate" : license.expiryDate,
-    @"issuingDate" : license.issuingDate,
-    @"issuingCountry" : license.issuingCountry,
+    @"firstName" : license.firstName ?: [NSNull null],
+    @"middleName" : license.middleName ?: [NSNull null],
+    @"lastName" : license.lastName ?: [NSNull null],
+    @"gender" : license.gender ?: [NSNull null],
+    @"addressCity" : license.addressCity ?: [NSNull null],
+    @"addressStreet" : license.addressStreet ?: [NSNull null],
+    @"addressState" : license.addressState ?: [NSNull null],
+    @"addressZip" : license.addressZip ?: [NSNull null],
+    @"birthDate" : license.birthDate ?: [NSNull null],
+    @"documentType" : license.documentType ?: [NSNull null],
+    @"licenseNumber" : license.licenseNumber ?: [NSNull null],
+    @"expiryDate" : license.expiryDate ?: [NSNull null],
+    @"issuingDate" : license.issuingDate ?: [NSNull null],
+    @"issuingCountry" : license.issuingCountry ?: [NSNull null]
   };
 }
 
